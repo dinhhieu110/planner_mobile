@@ -26,7 +26,7 @@ const initApp = () => {
     }))
 
     // Procedural
-    // Load list items
+    getPersistentData();
     refreshPage();
 }
 
@@ -79,7 +79,7 @@ const buildListItem = (item) => {
 const addClickListenerToCheckBox = (checkbox) => {
     checkbox.addEventListener("click", (event) => {
         toDoList.removeItem(checkbox.id);
-        // TODO: remove from persistent data
+        updatePersistentData(toDoList.getList())
         setTimeout(() => {
             refreshPage();
         }, 1000)
@@ -100,22 +100,17 @@ const processSubmission = () => {
     const nextItemId = calcNextItemId();
     const todoItem = createNewItem(nextItemId, newEntryText);
     toDoList.addItem(todoItem);
-
-    // TODO: update persistent data
+    updatePersistentData(toDoList.getList())
     refreshPage();
 }
 
 const processClearAll = () => {
-    // for (let i = 0; i < toDoList.length; i++) {
-    //     toDoList.removeItem(toDoList[i].getId());
-    // }
-    // refreshPage();
     const list = toDoList.getList();
     if (list.length) {
         const confirmed = confirm("Are you sure you want to clear the entire list?")
         if (confirmed) {
             toDoList.clearList();
-            // TODO: Update persistent data
+            updatePersistentData(toDoList.getList())
             refreshPage();
         }
     }
@@ -141,4 +136,18 @@ const createNewItem = (itemId, itemText) => {
     todo.setId(itemId);
     todo.setItem(itemText);
     return todo;
+}
+
+const updatePersistentData = (list) => {
+    localStorage.setItem("items", JSON.stringify(list))
+}
+
+const getPersistentData = () => {
+    const storedList = JSON.parse(localStorage.getItem("items"));
+    if (!storedList) return;
+    for (let i = 0; i < storedList.length; i++) {
+        const newItem = createNewItem(storedList[i]._id, storedList[i]._item);
+        toDoList.addItem(newItem)
+    }
+
 }
