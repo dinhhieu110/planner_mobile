@@ -1,0 +1,52 @@
+$default-font-color: #000;
+$background-color: #4a90e2;
+$container-bg-color: #f2f2f2;
+$container-border-color: #000;
+$textbox-border-color: lightgray;
+$button-text-color: #fff;
+$button-hover-color: #000;
+$add-button-color: #4caf50;
+$clear-button-color: #9f6060;
+
+@mixin mq($size) {
+  @media only screen and (min-width: $size) {
+    @content;
+  }
+}
+
+@function rem($pixels, $context: 16) {
+  @return ($pixels / $context) * 1rem;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  font-size: rem(16);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  color: $default-font-color;
+  width: 100%;
+  min-height: 100%;
+  @include mq(768px) {
+    font-size: rem(22);
+  }
+}
+
+body {
+  padding: rem(20);
+  background: $background-color;
+}
+
+section {
+  background-color: $container-bg-color;
+  width: 90%;
+  max-width: rem(700);
+  margin: auto;
+  border: rem(1) solid $container-border-color;
+  border-radius: 10px;
+}
